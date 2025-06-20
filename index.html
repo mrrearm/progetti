@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Mind - Progetti Innovativi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: #000;
+            color: #e8e8e8;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Universo stellato */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+        }
+        
+        .star.small { width: 1px; height: 1px; }
+        .star.medium { width: 2px; height: 2px; }
+        .star.large { width: 3px; height: 3px; }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 30%, transparent 70%);
+            animation: nebula-glow 12s infinite ease-in-out;
+        }
+        
+        @keyframes nebula-glow {
+            0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.8; transform: scale(1.3) rotate(180deg); }
+        }
+        
+        .mathematical-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        .math-formula {
+            position: absolute;
+            font-family: 'Times New Roman', serif;
+            font-size: clamp(12px, 2vw, 20px);
+            color: #ffffff;
+            animation: float 25s infinite linear;
+            white-space: nowrap;
+            text-shadow: 0 0 15px rgba(255,255,255,0.6);
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateX(calc(100vw + 100px)) rotate(360deg); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+        }
+        
+        .parchment {
+            background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 25%, #f0f0f0 50%, #e5e5e5 75%, #f2f2f2 100%);
+            border: 3px solid #333;
+            border-radius: 25px;
+            padding: clamp(25px, 5vw, 70px);
+            margin: 50px auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(255,255,255,0.4),
+                inset 0 0 25px rgba(0,0,0,0.05),
+                0 20px 60px rgba(0,0,0,0.3);
+            max-width: 95%;
+            transform: perspective(1200px) rotateX(3deg) rotateY(-2deg);
+            transition: all 0.4s ease;
+        }
+        
+        .parchment:hover {
+            transform: perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1.02);
+            box-shadow: 
+                0 0 70px rgba(255,255,255,0.6),
+                inset 0 0 35px rgba(0,0,0,0.1),
+                0 30px 80px rgba(0,0,0,0.4);
+        }
+        
+        .parchment::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(145deg, #222, #444, #333, #555);
+            border-radius: 30px;
+            z-index: -1;
+            filter: blur(2px);
+        }
+        
+        .quill-container {
+            position: absolute;
+            top: -35px;
+            right: clamp(20px, 5vw, 60px);
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .quill {
+            width: clamp(45px, 8vw, 90px);
+            height: clamp(18px, 3vw, 30px);
+            background: linear-gradient(45deg, #222 0%, #444 50%, #333 100%);
+            border-radius: 50px;
+            position: relative;
+            transform: rotate(-15deg);
+            box-shadow: 
+                0 3px 15px rgba(255,255,255,0.4),
+                inset 0 2px 8px rgba(255,255,255,0.2);
+        }
+        
+        .quill::before {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 18px solid #111;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .inkwell {
+            width: clamp(30px, 5vw, 45px);
+            height: clamp(30px, 5vw, 45px);
+            background: linear-gradient(135deg, #000 0%, #333 50%, #111 100%);
+            border-radius: 50%;
+            margin-left: 12px;
+            position: relative;
+            box-shadow: 
+                0 3px 15px rgba(255,255,255,0.4),
+                inset 0 -6px 12px rgba(255,255,255,0.15);
+        }
+        
+        .inkwell::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            background: linear-gradient(135deg, #111 0%, #333 50%, #000 100%);
+            border-radius: 50%;
+        }
+        
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(32px, 7vw, 56px);
+            color: #000;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 
+                3px 3px 6px rgba(255,255,255,0.8),
+                0 0 15px rgba(255,255,255,0.5);
+            font-weight: 700;
+            position: relative;
+            letter-spacing: 2px;
+        }
+        
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(120px, 35vw, 250px);
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(18px, 3.5vw, 28px);
+            color: #000;
+            text-align: center;
+            margin-bottom: 50px;
+            font-style: italic;
+            text-shadow: 
+                2px 2px 4px rgba(255,255,255,0.9),
+                0 0 10px rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+        }
+        
+        .project-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 50%, #f0f0f0 100%);
+            border: 2px solid #333;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .project-card:hover::before {
+            left: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            border-color: #555;
+        }
+        
+        .project-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(20px, 4vw, 26px);
+            color: #000;
+            margin-bottom: 18px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(255,255,255,0.8);
+        }
+        
+        .project-description {
+            color: #333;
+            line-height: 1.7;
+            font-size: clamp(15px, 2.5vw, 17px);
+            margin-bottom: 25px;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        .project-link {
+            display: inline-block;
+            background: linear-gradient(145deg, #333, #555, #444);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: clamp(13px, 2.5vw, 15px);
+            cursor: pointer;
+            box-shadow: 
+                0 4px 15px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .project-link:hover {
+            background: linear-gradient(145deg, #555, #333, #666);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .math-decoration {
+            position: absolute;
+            font-family: 'Times New Roman', serif;
+            color: rgba(0, 0, 0, 0.25);
+            font-size: clamp(13px, 2vw, 20px);
+            pointer-events: none;
+            user-select: none;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 20px;
+            color: #e8e8e8;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-top: auto;
+        }
+        
+        /* Modal per progetti dettagliati - Stile Nero su Bianco Elegante */
+        .project-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+        }
+        
+        .modal-content {
+            background: #fff;
+            margin: 2% auto;
+            padding: 50px;
+            border: none;
+            border-radius: 0;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: none;
+            animation: modalAppear 0.6s ease;
+            color: #000;
+        }
+        
+        .modal-content::before {
+            display: none;
+        }
+        
+        @keyframes modalAppear {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9) translateY(-30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .close {
+            color: #000;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            color: #555;
+            transform: scale(1.1);
+        }
+        
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 5vw, 44px);
+            color: #000;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .modal-text {
+            color: #000;
+            line-height: 1.8;
+            font-size: clamp(16px, 2.5vw, 18px);
+            text-align: justify;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .modal-text h2 {
+            color: #000;
+            margin: 40px 0 20px 0;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(22px, 4vw, 28px);
+            font-weight: 600;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        
+        .modal-text h3 {
+            color: #222;
+            margin: 30px 0 15px 0;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(18px, 3vw, 22px);
+            font-weight: 500;
+        }
+        
+        .modal-text p {
+            margin-bottom: 20px;
+        }
+        
+        .modal-text strong {
+            color: #000;
+            font-weight: 600;
+        }
+        
+        .modal-text ul, .modal-text ol {
+            margin: 20px 0 20px 30px;
+        }
+        
+        .modal-text li {
+            margin-bottom: 10px;
+        }
+        
+        .coding-symbols {
+            position: fixed;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: clamp(16px, 2.5vw, 22px);
+            animation: code-float 18s infinite linear;
+            pointer-events: none;
+            z-index: 0;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
+        }
+        
+        @keyframes code-float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .parchment {
+                margin: 30px auto;
+                padding: 35px 25px;
+            }
+            
+            .quill-container {
+                top: -25px;
+                right: 25px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+                padding: 35px 25px;
+            }
+            
+            .modal-title {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-container" id="starsContainer"></div>
+    <div class="mathematical-bg" id="mathBg"></div>
+    
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="parchment">
+                <div class="quill-container">
+                    <div class="quill"></div>
+                    <div class="inkwell"></div>
+                </div>
+                
+                <div class="math-decoration" style="top: 25px; left: 25px;">∫₀^∞ e^(-x²) dx = √π/2</div>
+                <div class="math-decoration" style="top: 60px; right: 90px;">∇²φ = 0</div>
+                <div class="math-decoration" style="bottom: 40px; left: 60px;">∑ₙ₌₁^∞ 1/n² = π²/6</div>
+                <div class="math-decoration" style="bottom: 70px; right: 40px;">e^(iπ) + 1 = 0</div>
+                
+                <h1 class="main-title">Beautiful Mind</h1>
+                <p class="subtitle">Progetti Innovativi per il Futuro</p>
+                
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <h3 class="project-title">Smart Flame</h3>
+                        <p class="project-description">
+                            Piastra elettrica intelligente con modulatore di calore che gestisce la fiamma e la durata con una sequenza personalizzata per una cottura perfetta.
+                        </p>
+                        <a class="project-link" onclick="openModal('smartflame')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">For-Smart</h3>
+                        <p class="project-description">
+                            Memorie in viaggio! Dispositivo compatto per formattare rapidamente memorie SD e USB senza PC, con funzioni di backup e memoria interna sicura.
+                        </p>
+                        <a class="project-link" onclick="openModal('forsmart')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">MediaCrypt</h3>
+                        <p class="project-description">
+                            Sistema innovativo per contenuti criptati disponibili offline, garantendo sicurezza e accessibilità dei dati anche senza connessione internet.
+                        </p>
+                        <a class="project-link" onclick="openModal('mediacrypt')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">No Fake News!</h3>
+                        <p class="project-description">
+                            Sistema di rating per combattere le notizie false sui social media, aiutando gli utenti a verificare l'attendibilità delle informazioni.
+                        </p>
+                        <a class="project-link" onclick="openModal('nofakenews')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Codeline</h3>
+                        <p class="project-description">
+                            Rivoluzionario sistema per telefoni senza schede SIM fisiche, eliminando la necessità di trasferire manualmente le SIM tra dispositivi.
+                        </p>
+                        <a class="project-link" onclick="openModal('codeline')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Virtual Bistrò</h3>
+                        <p class="project-description">
+                            Esperienza culinaria immersiva che permette di cenare virtualmente nei ristoranti più famosi del mondo, dalla Torre Eiffel a New York.
+                        </p>
+                        <a class="project-link" onclick="openModal('virtualbistro')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Mondo Design</h3>
+                        <p class="project-description">
+                            Personalizzazione estrema: invece di 1000 scarpe diverse, una sola scarpa che si adatta a 1000 stili personali unici dell'utente.
+                        </p>
+                        <a class="project-link" onclick="openModal('mondodesign')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">U-Commerce</h3>
+                        <p class="project-description">
+                            You Commerce e Universal Commerce: sistema di e-commerce dinamico che abbina sconti variabili a criptovalute con tassi d'interesse dinamici.
+                        </p>
+                        <a class="project-link" onclick="openModal('ucommerce')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Bevi Stabia</h3>
+                        <p class="project-description">
+                            Valorizzazione delle 28 sorgenti uniche di Castellammare di Stabia, la "città delle acque", per promuovere l'acqua locale di qualità.
+                        </p>
+                        <a class="project-link" onclick="openModal('bevistabia')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">E-Gift</h3>
+                        <p class="project-description">
+                            Sistema di regali elettronici che permette di donare regali virtuali che possono essere ritirati fisicamente nella vita reale.
+                        </p>
+                        <a class="project-link" onclick="openModal('egift')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Trashware</h3>
+                        <p class="project-description">
+                            Recupero sostenibile di vecchio hardware, assemblando componenti diversi per creare sistemi funzionanti e utili, riducendo i rifiuti elettronici.
+                        </p>
+                        <a class="project-link" onclick="openModal('trashware')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">Lavagna Intelligente</h3>
+                        <p class="project-description">
+                            Supporto educativo touch-screen per docenti e studenti, integrando tecnologia avanzata per migliorare l'apprendimento in classe e a casa.
+                        </p>
+                        <a class="project-link" onclick="openModal('lavagnaintelligente')">Scopri di più</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h3 class="project-title">SearchBus</h3>
+                        <p class="project-description">
+                            Rivoluziona l'attesa dei trasporti pubblici con un sistema intelligente per trovare e tracciare il tuo "bus dei sogni" in tempo reale.
+                        </p>
+                        <a class="project-link" onclick="openModal('searchbus')">Scopri di più</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 Beautiful Mind Projects - Dove l'innovazione incontra la creatività</p>
+            <p style="font-style: italic; margin-top: 15px; font-size: 18px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">
+                "L'immaginazione è più importante della conoscenza" - Albert Einstein
+            </p>
+        </div>
+    </div>
+    
+    <!-- Modal per progetti dettagliati -->
+    <div id="projectModal" class="project-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Dati dettagliati dei progetti
+        const projectsData = {
+            smartflame: {
+                title: "Smart Flame: Piastra Elettrica Intelligente",
+                content: `
+                    <h2>Innovazione Culinaria del Futuro</h2>
+                    
+                    <p><strong>Concetto Rivoluzionario:</strong><br>
+                    SmartFlame rappresenta l'evoluzione della cottura domestica, combinando precisione tecnologica e semplicità d'uso. Non è semplicemente una piastra elettrica, ma un sistema intelligente che trasforma ogni cucina in un laboratorio culinario professionale.</p>
+                    
+                    <h3>Caratteristiche Principali:</h3>
+                    
+                    <p><strong>• Modulatore di Calore Avanzato:</strong><br>
+                    Sistema di controllo termico preciso al grado, che mantiene la temperatura desiderata con variazioni minime. Perfetto per tecniche culinarie che richiedono controllo assoluto come la tempera del cioccolato o la cottura sous-vide.</p>
+                    
+                    <p><strong>• Sequenze Personalizzate:</strong><br>
+                    Programmazione di cicli di cottura complessi con variazioni automatiche di temperatura e durata. Ideale per ricette elaborate che richiedono diverse fasi di cottura.</p>
+                    
+                    <p><strong>• Gestione Intelligente della Durata:</strong><br>
+                    Timer integrato con notifiche progressive e sistema di spegnimento automatico per massima sicurezza. Include funzioni di promemoria e controllo remoto tramite app.</p>
+                    
+                    <p><strong>• Interfaccia Intuitiva:</strong><br>
+                    Display touch HD con interfaccia grafica user-friendly, ricettario integrato e sistema di guide vocali per assistenza durante la cottura.</p>
+                    
+                    <h3>Vantaggi Rivoluzionari:</h3>
+                    
+                    <p><strong>Efficienza Energetica:</strong> Consumo ridotto del 40% rispetto alle piastre tradizionali grazie al sistema di modulazione intelligente.</p>
+                    
+                    <p><strong>Versatilità Assoluta:</strong> Adatta per ogni tipo di pentola e tecnica culinaria, dalla cottura lenta alle alte temperature per la sigillatura.</p>
+                    
+                    <p><strong>Sicurezza Garantita:</strong> Sensori di sovraccarico, spegnimento automatico e superficie che rimane fredda ai bordi.</p>
+                    
+                    <p><strong>Connettività Smart:</strong> Integrazione con assistenti vocali e controllo da smartphone.</p>
+                `
+            },
+            forsmart: {
+                title: "For-Smart: Memorie in Viaggio",
+                content: `
+                    <h2>Rivoluzione nella Gestione delle Memorie</h2>
+                    
+                    <p><strong>Concetto Innovativo:</strong><br>
+                    For-Smart è la soluzione definitiva per chi lavora con memorie esterne e ha bisogno di formattare, gestire e trasferire dati senza dover accendere un computer.</p>
+                    
+                    <h3>Funzionalità Principali:</h3>
+                    
+                    <p><strong>• Formattazione Rapida:</strong><br>
+                    Supporto per tutti i formati di file system più comuni (FAT32, exFAT, NTFS, EXT4) con operazioni di formattazione completate in pochi secondi.</p>
+                    
+                    <p><strong>• Backup Automatico:</strong><br>
+                    Memoria interna da 128GB per salvare automaticamente i contenuti delle memorie prima della formattazione, con crittografia AES-256.</p>
+                    
+                    <p><strong>• Diagnostica Avanzata:</strong><br>
+                    Verifica dello stato di salute delle memorie, con stima della vita residua e rilevamento di settori danneggiati.</p>
+                    
+                    <p><strong>• Compatibilità Universale:</strong><br>
+                    Supporto per SD, microSD, USB-A, USB-C, con adattatori inclusi per ogni tipo di connettore.</p>
+                    
+                    <h3>Vantaggi Unici:</h3>
+                    
+                    <p><strong>Portabilità:</strong> Dimensioni compatte (8x5x2 cm) e batteria integrata per 20 ore di autonomia.</p>
+                    
+                    <p><strong>Sicurezza:</strong> Cancellazione sicura dei dati con standard militari e verifica della pulizia completa.</p>
+                    
+                    <p><strong>Semplicità:</strong> Interfaccia a LED con feedback immediato sullo stato delle operazioni.</p>
+                    
+                    <p><strong>Versatilità:</strong> Utile per fotografi, videomaker, tecnici IT e chiunque lavori con memorie esterne.</p>
+                `
+            },
+            mediacrypt: {
+                title: "MediaCrypt: Sicurezza Offline",
+                content: `
+                    <h2>Protezione dei Dati Senza Connessione</h2>
+                    
+                    <p><strong>Concetto Avanzato:</strong><br>
+                    MediaCrypt risolve il problema della sicurezza dei dati in ambienti senza connessione internet, garantendo accesso protetto a contenuti sensibili ovunque.</p>
+                    
+                    <h3>Tecnologie Implementate:</h3>
+                    
+                    <p><strong>• Crittografia End-to-End:</strong><br>
+                    Algoritmi AES-256 e RSA-4096 per proteggere file, video e documenti con chiavi generate localmente.</p>
+                    
+                    <p><strong>• Autenticazione Biometrica:</strong><br>
+                    Sblocco tramite impronta digitale, riconoscimento facciale o pattern complessi senza dipendere da server esterni.</p>
+                    
+                    <p><strong>• Sincronizzazione Offline:</strong><br>
+                    Sistema peer-to-peer per condividere contenuti criptati tra dispositivi vicini senza internet.</p>
+                    
+                    <p><strong>• Archiviazione Sicura:</strong><br>
+                    Partizioni protette su dispositivi esterni con autenticazione a due fattori hardware.</p>
+                    
+                    <h3>Casi d'Uso:</h3>
+                    
+                    <p><strong>Giornalismo Investigativo:</strong> Protezione delle fonti e dei materiali sensibili in aree con censura.</p>
+                    
+                    <p><strong>Missioni Umanitarie:</strong> Accesso sicuro a documenti medici e piani operativi in zone remote.</p>
+                    
+                    <p><strong>Business:</strong> Protezione dei segreti industriali durante viaggi internazionali.</p>
+                    
+                    <p><strong>Privati:</strong> Archiviazione di documenti personali con massima sicurezza.</p>
+                `
+            },
+            nofakenews: {
+                title: "No Fake News! Verifica delle Informazioni",
+                content: `
+                    <h2>Combattere la Disinformazione</h2>
+                    
+                    <p><strong>Missione:</strong><br>
+                    No Fake News! è un sistema di rating decentralizzato che aiuta gli utenti a valutare l'affidabilità delle notizie sui social media e sul web.</p>
+                    
+                    <h3>Funzionalità Chiave:</h3>
+                    
+                    <p><strong>• Analisi Automatica:</strong><br>
+                    Controllo incrociato delle fonti, verifica delle immagini (reverse image search) e rilevamento di linguaggio manipolatorio.</p>
+                    
+                    <p><strong>• Community Rating:</strong><br>
+                    Sistema di valutazione collettiva basato sulla reputazione degli utenti e su algoritmi anti-manipolazione.</p>
+                    
+                    <p><strong>• Fact-Checking Integrato:</strong><br>
+                    Accesso diretto a database di fact-checking riconosciuti e a fonti ufficiali.</p>
+                    
+                    <p><strong>• Estensioni per Browser:</strong><br>
+                    Integrazione con i principali social network e siti di notizie per valutazioni in tempo reale.</p>
+                    
+                    <h3>Tecnologie Utilizzate:</h3>
+                    
+                    <p><strong>AI Avanzata:</strong> Machine learning per rilevare pattern di disinformazione e notizie sospette.</p>
+                    
+                    <p><strong>Blockchain:</strong> Registro immutabile delle valutazioni per prevenire manipolazioni.</p>
+                    
+                    <p><strong>API Aperte:</strong> Possibilità per sviluppatori di integrare il sistema in nuove piattaforme.</p>
+                    
+                    <p><strong>Privacy by Design:</strong> Nessun tracciamento degli utenti, solo valutazioni anonime e aggregate.</p>
+                `
+            },
+            codeline: {
+                title: "Codeline: Telefonia Senza SIM",
+                content: `
+                    <h2>Rivoluzione nella Connettività Mobile</h2>
+                    
+                    <p><strong>Visione:</strong><br>
+                    Codeline elimina la necessità delle tradizionali SIM fisiche, sostituendole con un sistema digitale sicuro e flessibile.</p>
+                    
+                    <h3>Caratteristiche Principali:</h3>
+                    
+                    <p><strong>• Identità Digitale:</strong><br>
+                    Profilo utente criptato che contiene tutte le informazioni della SIM tradizionale, accessibile tramite autenticazione biometrica.</p>
+                    
+                    <p><strong>• Gestione Cloud:</strong><br>
+                    Possibilità di attivare, disattivare e trasferire numeri telefonici tra dispositivi in pochi secondi.</p>
+                    
+                    <p><strong>• Multi-Profilo:</strong><br>
+                    Gestione di più numeri sullo stesso dispositivo con regole avanzate per chiamate in entrata e in uscita.</p>
+                    
+                    <p><strong>• Sicurezza Avanzata:</strong><br>
+                    Crittografia end-to-end per chiamate e messaggi, con protezione da clonazione e intercettazioni.</p>
+                    
+                    <h3>Vantaggi per gli Utenti:</h3>
+                    
+                    <p><strong>Semplicità:</strong> Cambio dispositivo senza dover trasferire fisicamente la SIM.</p>
+                    
+                    <p><strong>Flessibilità:</strong> Possibilità di avere numeri locali quando si viaggia senza cambiare SIM.</p>
+                    
+                    <p><strong>Sicurezza:</strong> Blocco istantaneo in caso di furto del dispositivo.</p>
+                    
+                    <p><strong>Innovazione:</strong> Integrazione con servizi VoIP e soluzioni aziendali avanzate.</p>
+                `
+            },
+            virtualbistro: {
+                title: "Virtual Bistrò: Esperienza Culinaria Immersiva",
+                content: `
+                    <h2>Cena nei Luoghi più Iconici del Mondo</h2>
+                    
+                    <p><strong>Concept Unico:</strong><br>
+                    Virtual Bistrò combina realtà virtuale, videoproiezioni a 360° e piatti gourmet per creare esperienze culinarie memorabili senza muoversi da casa.</p>
+                    
+                    <h3>Esperienze Disponibili:</h3>
+                    
+                    <p><strong>• Cena sulla Torre Eiffel:</strong><br>
+                    Vista panoramica di Parigi con menu francese autentico e sottofondo musicale dal vivo.</p>
+                    
+                    <p><strong>• Pranzo a Times Square:</strong><br>
+                    Energia di New York con piatti della cucina americana contemporanea.</p>
+                    
+                    <p><strong>• Aperitivo a Venezia:</strong><br>
+                    Atmosfera romantica dei canali con cicchetti e spritz preparati da barman virtuali.</p>
+                    
+                    <p><strong>• Cena Sottomarina:</strong><br>
+                    Esperienza unica circondati dalla vita marina con menu a base di pesce fresco.</p>
+                    
+                    <h3>Tecnologia Utilizzata:</h3>
+                    
+                    <p><strong>Realtà Virtuale:</strong> Visori ad alta risoluzione con tracciamento del movimento.</p>
+                    
+                    <p><strong>Ambienti 4K:</strong> Videoproiezioni a 360° con illuminazione dinamica.</p>
+                    
+                    <p><strong>Audio 3D:</strong> Sistema surround per un'esperienza completamente immersiva.</p>
+                    
+                    <p><strong>Feedback Tattile:</strong> Vibrazioni e ventole per simulare vento e movimento.</p>
+                `
+            },
+            mondodesign: {
+                title: "Mondo Design: Personalizzazione Estrema",
+                content: `
+                    <h2>Una Scarpa, Mille Stili</h2>
+                    
+                    <p><strong>Filosofia:</strong><br>
+                    Mondo Design sfida il concetto tradizionale di moda offrendo un singolo prodotto che si adatta dinamicamente allo stile e all'umore dell'utente.</p>
+                    
+                    <h3>Tecnologie Innovative:</h3>
+                    
+                    <p><strong>• Materiali Mutanti:</strong><br>
+                    Tessuti con pigmenti fotocromatici e termocromatici che cambiano colore in base alla luce e alla temperatura.</p>
+                    
+                    <p><strong>• Componenti Modulari:</strong><br>
+                    Sistema di accessori intercambiabili (lacci, fibbie, inserti) per trasformare completamente il look.</p>
+                    
+                    <p><strong>• App di Controllo:</strong><br>
+                    Personalizzazione digitale del design con anteprima in realtà aumentata prima dell'applicazione fisica.</p>
+                    
+                    <p><strong>• E-Ink Display:</strong><br>
+                    Pannelli sottili sulla superficie che possono mostrare pattern, immagini o messaggi personalizzati.</p>
+                    
+                    <h3>Vantaggi:</h3>
+                    
+                    <p><strong>Sostenibilità:</strong> Riduzione della produzione di massa a favore di un prodotto longevo.</p>
+                    
+                    <p><strong>Espressione Personale:</strong> Adattamento quotidiano allo stile e all'umore.</p>
+                    
+                    <p><strong>Tecnologia:</strong> Integrazione con dispositivi smart per notifiche e funzionalità avanzate.</p>
+                    
+                    <p><strong>Comodità:</strong> Calzatura ergonomica che si adatta alla forma del piede.</p>
+                `
+            },
+            ucommerce: {
+                title: "U-Commerce: E-Commerce Dinamico",
+                content: `
+                    <h2>You Commerce meets Universal Commerce</h2>
+                    
+                    <p><strong>Visione:</strong><br>
+                    U-Commerce unisce il meglio dello shopping personalizzato con la flessibilità delle criptovalute, creando un'esperienza d'acquisto unica nel suo genere.</p>
+                    
+                    <h3>Funzionalità Principali:</h3>
+                    
+                    <p><strong>• Sconti Dinamici:</strong><br>
+                    Sistema di prezzi variabili basato su comportamento d'acquisto, fedeltà e condizioni di mercato in tempo reale.</p>
+                    
+                    <p><strong>• Crypto Integration:</strong><br>
+                    Pagamenti con principali criptovalute e token proprietari, con conversione automatica al miglior tasso.</p>
+                    
+                    <p><strong>• Interest Shopping:</strong><br>
+                    Programma che accumula interessi sui saldi non spesi, incentivando gli acquisti futuri.</p>
+                    
+                    <p><strong>• Universal Cart:</strong><br>
+                    Carrello unico che funziona su tutti i siti partner, con checkout centralizzato.</p>
+                    
+                    <h3>Tecnologie Utilizzate:</h3>
+                    
+                    <p><strong>AI Pricing:</strong> Algoritmi che adattano prezzi e sconti in base a centinaia di fattori.</p>
+                    
+                    <p><strong>Blockchain:</strong> Transazioni sicure e trasparenti con smart contract.</p>
+                    
+                    <p><strong>Big Data:</strong> Analisi del comportamento per personalizzazione estrema.</p>
+                    
+                    <p><strong>API Economy:</strong> Integrazione con tutti i principali e-commerce e piattaforme di pagamento.</p>
+                `
+            },
+            bevistabia: {
+                title: "Bevi Stabia: Valorizzazione delle Acque Locali",
+                content: `
+                    <h2>Castellammare di Stabia, Città delle Acque</h2>
+                    
+                    <p><strong>Missione:</strong><br>
+                    Bevi Stabia promuove le 28 sorgenti uniche della città, creando una rete di distribuzione e consumo consapevole dell'acqua locale di qualità.</p>
+                    
+                    <h3>Iniziative Principali:</h3>
+                    
+                    <p><strong>• Mappa delle Sorgenti:</strong><br>
+                    App interattiva con tutte le fonti pubbliche, caratteristiche chimiche e percorsi turistici.</p>
+                    
+                    <p><strong>• Rete di Distribuzione:</strong><br>
+                    Chioschi moderni in tutta la città che erogano acqua microfiltrata delle sorgenti locali.</p>
+                    
+                    <p><strong>• Borracce Smart:</strong><br>
+                    Contenitori high-tech che tracciano il consumo, suggeriscono la sorgente ideale e premiano i comportamenti virtuosi.</p>
+                    
+                    <p><strong>• Analisi Scientifica:</strong><br>
+                    Studio costante delle proprietà benefiche delle diverse acque stabiesi e loro effetti sulla salute.</p>
+                    
+                    <h3>Vantaggi:</h3>
+                    
+                    <p><strong>Ambientale:</strong> Riduzione dell'uso di plastica e trasporti inquinanti.</p>
+                    
+                    <p><strong>Salute:</strong> Accesso ad acque naturali ricche di minerali benefici.</p>
+                    
+                    <p><strong>Turismo:</strong> Creazione di un'attrazione unica basata sul patrimonio idrico.</p>
+                    
+                    <p><strong>Economia Locale:</strong> Valorizzazione delle risorse naturali e creazione di posti di lavoro.</p>
+                `
+            },
+            egift: {
+                title: "E-Gift: Regali Virtuali che Diventano Reali",
+                content: `
+                    <h2>Rivoluzione nel Mondo dei Regali</h2>
+                    
+                    <p><strong>Concept:</strong><br>
+                    E-Gift colma il divario tra regali digitali e fisici, permettendo di donare esperienze e oggetti che possono essere riscattati nel mondo reale.</p>
+                    
+                    <h3>Funzionalità Uniche:</h3>
+                    
+                    <p><strong>• Catalogo Ibrido:</strong><br>
+                    Selezione tra migliaia di prodotti fisici e digitali da regalare con un semplice click.</p>
+                    
+                    <p><strong>• Riscatto Flessibile:</strong><br>
+                    Il destinatario può scegliere quando e dove ritirare il regalo tra diverse opzioni disponibili.</p>
+                    
+                    <p><strong>• Esperienze Personalizzate:</strong><br>
+                    Creazione di regali unici combinando elementi digitali (video, messaggi) con oggetti fisici.</p>
+                    
+                    <p><strong>• Tracciamento Emozionale:</strong><br>
+                    Sistema che cattura la reazione del destinatario al momento dell'apertura del regalo virtuale.</p>
+                    
+                    <h3>Tecnologie:</h3>
+                    
+                    <p><strong>Realtà Aumentata:</strong> Anteprima dei regali fisici nell'ambiente del destinatario.</p>
+                    
+                    <p><strong>Logistica Integrata:</strong> Rete di negozi e centri di ritiro in tutto il mondo.</p>
+                    
+                    <p><strong>Blockchain:</strong> Certificazione digitale della proprietà e autenticità dei regali.</p>
+                    
+                    <p><strong>AI:</strong> Suggerimenti personalizzati basati sui gusti del destinatario.</p>
+                `
+            },
+            trashware: {
+                title: "Trashware: Rigenerazione Creativa dell'Hardware",
+                content: `
+                    <h2>Dai Rifiuti Elettronici a Nuove Opportunità</h2>
+                    
+                    <p><strong>Filosofia:</strong><br>
+                    Trashware trasforma vecchi computer e dispositivi elettronici in risorse utili, combattendo l'e-waste e promuovendo l'inclusione digitale.</p>
+                    
+                    <h3>Processo di Rigenerazione:</h3>
+                    
+                    <p><strong>• Raccolta Intelligente:</strong><br>
+                    Rete di punti di raccolta per dispositivi usati con valutazione immediata del potenziale di riutilizzo.</p>
+                    
+                    <p><strong>• Diagnostica Avanzata:</strong><br>
+                    Test automatizzati per identificare componenti ancora funzionanti e possibili configurazioni.</p>
+                    
+                    <p><strong>• Assemblaggio Creativo:</strong><br>
+                    Combinazione di parti da diversi dispositivi per creare sistemi completi e performanti.</p>
+                    
+                    <p><strong>• Software Ottimizzato:</strong><br>
+                    Installazione di sistemi operativi leggeri e software open source per massimizzare le prestazioni.</p>
+                    
+                    <h3>Impatto Sociale:</h3>
+                    
+                    <p><strong>Ambientale:</strong> Riduzione dei rifiuti elettronici e dell'estrazione di nuove risorse.</p>
+                    
+                    <p><strong>Educativo:</strong> Laboratori per insegnare riparazione e riutilizzo a scuole e comunità.</p>
+                    
+                    <p><strong>Inclusione:</strong> Fornitura di dispositivi a basso costo per chi non può permettersi hardware nuovo.</p>
+                    
+                    <p><strong>Economia Circolare:</strong> Creazione di posti di lavoro nel settore della rigenerazione.</p>
+                `
+            },
+            lavagnaintelligente: {
+                title: "Lavagna Intelligente: Educazione 4.0",
+                content: `
+                    <h2>Rivoluzione nell'Apprendimento</h2>
+                    
+                    <p><strong>Visione:</strong><br>
+                    La Lavagna Intelligente integra tecnologia touch, realtà aumentata e intelligenza artificiale per trasformare l'esperienza educativa in classe e a casa.</p>
+                    
+                    <h3>Funzionalità Avanzate:</h3>
+                    
+                    <p><strong>• Interazione Multimodale:</strong><br>
+                    Touch screen ad alta precisione, riconoscimento della scrittura manuale e comandi vocali integrati.</p>
+                    
+                    <p><strong>• Realtà Aumentata:</strong><br>
+                    Visualizzazione 3D di concetti scientifici, storici e artistici direttamente sulla superficie della lavagna.</p>
+                    
+                    <p><strong>• Collaborazione Remota:</strong><br>
+                    Condivisione in tempo reale con dispositivi degli studenti e lavagne di altre classi in tutto il mondo.</p>
+                    
+                    <p><strong>• Adattamento AI:</strong><br>
+                    Analisi dello stile di apprendimento e suggerimenti di contenuti personalizzati per ogni studente.</p>
+                    
+                    <h3>Vantaggi:</h3>
+                    
+                    <p><strong>Didattica:</strong> Maggiore coinvolgimento degli studenti attraverso strumenti interattivi.</p>
+                    
+                    <p><strong>Accessibilità:</strong> Supporto per diversi stili di apprendimento e bisogni speciali.</p>
+                    
+                    <p><strong>Efficienza:</strong> Riduzione del tempo di preparazione delle lezioni con librerie di contenuti integrate.</p>
+                    
+                    <p><strong>Analisi:</strong> Monitoraggio dei progressi della classe e dei singoli studenti in tempo reale.</p>
+                `
+            },
+            searchbus: {
+                title: "SearchBus: Rivoluzione nei Trasporti Pubblici",
+                content: `
+                    <h2>Mai Più Attese Infinite</h2>
+                    
+                    <p><strong>Missione:</strong><br>
+                    SearchBus utilizza intelligenza artificiale e dati in tempo reale per trasformare l'esperienza di utilizzo degli autobus, rendendola più efficiente e piacevole.</p>
+                    
+                    <h3>Funzionalità Principali:</h3>
+                    
+                    <p><strong>• Tracciamento in Tempo Reale:</strong><br>
+                    Mappa interattiva che mostra la posizione esatta di ogni autobus e il tempo di arrivo stimato.</p>
+                    
+                    <p><strong>• Pianificazione Intelligente:</strong><br>
+                    Suggerimenti di percorsi ottimizzati basati su traffico, eventi e preferenze personali.</p>
+                    
+                    <p><strong>• Notifiche Proattive:</strong><br>
+                    Avvisi personalizzati per ritardi, cambi di percorso e opportunità di risparmio di tempo.</p>
+                    
+                    <p><strong>• Integrazione Multimodale:</strong><br>
+                    Combinazione con altri mezzi di trasporto (bike sharing, monopattini, metro) per soluzioni complete.</p>
+                    
+                    <h3>Tecnologie Utilizzate:</h3>
+                    
+                    <p><strong>AI Predittiva:</strong> Previsione di ritardi e affollamento basata su dati storici e in tempo reale.</p>
+                    
+                    <p><strong>IoT:</strong> Sensori sugli autobus che monitorano posizione, velocità e affollamento.</p>
+                    
+                    <p><strong>Big Data:</strong> Analisi di milioni di dati per ottimizzare le rotte e le frequenze.</p>
+                    
+                    <p><strong>Cloud Computing:</strong> Elaborazione distribuita per garantire prestazioni sempre elevate.</p>
+                `
+            }
+        };
+
+        // Funzione per aprire il modal con i dettagli del progetto
+        function openModal(projectId) {
+            const modal = document.getElementById('projectModal');
+            const modalContent = document.getElementById('modalContent');
+            const project = projectsData[projectId];
+            
+            if (project) {
+                modalContent.innerHTML = `
+                    <h1 class="modal-title">${project.title}</h1>
+                    <div class="modal-text">${project.content}</div>
+                `;
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+            }
+        }
+
+        // Funzione per chiudere il modal
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        // Chiudi il modal se si clicca fuori dal contenuto
+        window.onclick = function(event) {
+            const modal = document.getElementById('projectModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Crea stelle dinamiche
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random() * 3;
+                const starType = size < 1 ? 'small' : size < 2 ? 'medium' : 'large';
+                
+                star.className = `star ${starType}`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                
+                container.appendChild(star);
+            }
+        }
+
+        // Crea formule matematiche fluttuanti
+        function createMathFormulas() {
+            const container = document.getElementById('mathBg');
+            const formulas = [
+                "E = mc²", "F = ma", "a² + b² = c²", "e^(iπ) + 1 = 0", 
+                "∇⋅E = ρ/ε₀", "∇×E = -∂B/∂t", "ψ = A sin(kx - ωt)", 
+                "H|ψ⟩ = E|ψ⟩", "S = k ln Ω", "x = [-b ± √(b²-4ac)]/2a"
+            ];
+            
+            formulas.forEach((formula, index) => {
+                const element = document.createElement('div');
+                element.className = 'math-formula';
+                element.textContent = formula;
+                element.style.left = `${Math.random() * 80 + 10}%`;
+                element.style.top = `${Math.random() * 80 + 10}%`;
+                element.style.animationDuration = `${20 + Math.random() * 20}s`;
+                element.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(element);
+            });
+        }
+
+        // Crea simboli di codice fluttuanti
+        function createCodeSymbols() {
+            const symbols = ["{}", "()", "[]", "<>", "/*", "*/", "//", "=>", "==", "!=", "++", "--", "&&", "||", "??", "...", "##", "$$", "%%", "^^"];
+            
+            symbols.forEach((symbol, index) => {
+                const element = document.createElement('div');
+                element.className = 'coding-symbols';
+                element.textContent = symbol;
+                element.style.left = `${Math.random() * 90 + 5}%`;
+                element.style.animationDuration = `${15 + Math.random() * 15}s`;
+                element.style.animationDelay = `${Math.random() * 3}s`;
+                document.body.appendChild(element);
+            });
+        }
+
+        // Crea nebulose decorative
+        function createNebulas() {
+            const container = document.getElementById('starsContainer');
+            const nebulaCount = 5;
+            
+            for (let i = 0; i < nebulaCount; i++) {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                nebula.style.width = `${100 + Math.random() * 300}px`;
+                nebula.style.height = `${100 + Math.random() * 300}px`;
+                nebula.style.left = `${Math.random() * 80 + 10}%`;
+                nebula.style.top = `${Math.random() * 80 + 10}%`;
+                nebula.style.animationDuration = `${10 + Math.random() * 20}s`;
+                nebula.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(nebula);
+            }
+        }
+
+        // Inizializza tutti gli elementi quando la pagina è caricata
+        window.onload = function() {
+            createStars();
+            createMathFormulas();
+            createCodeSymbols();
+            createNebulas();
+        };
+    </script>
+</body>
+</html>
